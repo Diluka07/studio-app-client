@@ -1,27 +1,30 @@
-import * as React from "react";
+import React, { useEffect } from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
-import TestGrid from "./TestGrid";
+import { loadUserAsync } from "../../../Redux/slices/authentication";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import SideNavbar from "../../SideNavbar";
 
 const drawerWidth = 240;
 
-function ResponsiveDrawer(props) {
-  const { window } = props;
+const ProtectedLayout = (props) => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(loadUserAsync());
+  }, []);
+  const { loading, isAuthenticated, error } = useSelector(
+    (state) => state.authentication.authData
+  );
+  const { window, children } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
@@ -32,36 +35,16 @@ function ResponsiveDrawer(props) {
     <div>
       <Toolbar />
       <Divider />
-      <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+      <SideNavbar />
     </div>
   );
 
   const container =
     window !== undefined ? () => window().document.body : undefined;
+
+  if (!localStorage.getItem("token")) {
+    return <Navigate to="/landing" replace />;
+  }
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -135,13 +118,13 @@ function ResponsiveDrawer(props) {
         }}
       >
         <Toolbar />
-        <TestGrid />
+        <Outlet />
       </Box>
     </Box>
   );
-}
+};
 
-ResponsiveDrawer.propTypes = {
+ProtectedLayout.propTypes = {
   /**
    * Injected by the documentation to work in an iframe.
    * You won't need it on your project.
@@ -149,4 +132,4 @@ ResponsiveDrawer.propTypes = {
   window: PropTypes.func,
 };
 
-export default ResponsiveDrawer;
+export default ProtectedLayout;
