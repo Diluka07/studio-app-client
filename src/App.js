@@ -19,6 +19,7 @@ function App() {
             <Route index element={<Landing />} />
             <Route path="landing" element={<Landing />} />
             <Route element={<ProtectedLayout />}>
+              <Route index element={<TestGrid />} />
               <Route path="t1" element={<TestGrid />} />
               <Route path="t2" element={<TestL />} />
               <Route path="dashboard" element={<Dashboard/>} />
