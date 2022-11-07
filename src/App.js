@@ -8,12 +8,14 @@ import TestL from "./Components/Container/ProtectedLayout/TestL";
 import ProtectedLayout from "./Components/Container/ProtectedLayout";
 import Dashboard from "./Components/Dashboard";
 import CustomerRegister from "./Components/Customer/CustomerRegister";
+import Alert from "./Components/Shared/Alert";
 
 function App() {
 
   return (
     <>
       <Provider store={store}>
+      <Alert/>
         <BrowserRouter>
           <Routes>
             <Route index element={<Landing />} />

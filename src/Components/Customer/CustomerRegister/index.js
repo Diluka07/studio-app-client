@@ -1,9 +1,10 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { customerRegisterAsync } from "../../../Redux/slices/customer";
+import { setAlertData, alertDataReset } from "../../../Redux/slices/alert";
 import { useDispatch, useSelector } from "react-redux";
 import { useQRCode } from "react-qrcode";
-import { saveAs } from 'file-saver';
+import { saveAs } from "file-saver";
 
 const CustomerRegister = () => {
   const dispatch = useDispatch();
@@ -11,18 +12,39 @@ const CustomerRegister = () => {
     (state) => state.customer.customerRegisterData
   );
 
-  const [value, setValue] = useState("uhjguhffasT768yf5");
+  useEffect(() => {
+    if (data.success) {
+      dispatch(
+        setAlertData({
+          msg: "Registration successfull ! ",
+          alertType: "success",
+        })
+      );
+      setTimeout(() => dispatch(alertDataReset()), 5000);
+    }
+  }, [dispatch, data]);
+
+  useEffect(() => {
+    if (error) {
+      dispatch(
+        setAlertData({ msg: "Something went wrong", alertType: "error" })
+      );
+      setTimeout(() => dispatch(alertDataReset()), 5000);
+    }
+  }, [dispatch, error]);
+
+  const [value, setValue] = useState("");
   const dataUrl = useQRCode(value);
 
   const downloadQR = () => {
-    saveAs(dataUrl, "QR.png")
-  }
+    saveAs(dataUrl, "QR.png");
+  };
 
   const [formData, setFormData] = useState({
     name: "",
     nic: "",
-    contactNumber1: null,
-    contactNumber2: null,
+    contactNumber1: "",
+    contactNumber2: "",
     address: "",
   });
 
@@ -117,9 +139,13 @@ const CustomerRegister = () => {
             </button>
           </div>
         </form>
-        {/* <div>dataUrl: {dataUrl}</div>
-        <img src={dataUrl} onClick={downloadQR}/>
-        <input onChange={(e) => setValue(e.currentTarget.value)} /> */}
+        <div>dataUrl: {dataUrl}</div>
+        <img
+          style={{ width: "300px", height: "300px" }}
+          src={dataUrl}
+          onClick={downloadQR}
+        />
+        <input onChange={(e) => setValue(e.currentTarget.value)} />
       </div>
     </div>
   );
