@@ -7,15 +7,15 @@ import TestGrid from "./Components/Container/ProtectedLayout/TestGrid";
 import TestL from "./Components/Container/ProtectedLayout/TestL";
 import ProtectedLayout from "./Components/Container/ProtectedLayout";
 import Dashboard from "./Components/Dashboard";
-import CustomerRegister from "./Components/Customer/CustomerRegister";
+import CustomerRegister from "./Components/CustomerManagement/CustomerRegister";
+import AddNewItem from "./Components/ItemManagement/AddNewItem";
 import Alert from "./Components/Shared/Alert";
 
 function App() {
-
   return (
     <>
       <Provider store={store}>
-      <Alert/>
+        <Alert />
         <BrowserRouter>
           <Routes>
             <Route index element={<Landing />} />
@@ -24,8 +24,9 @@ function App() {
               <Route index element={<TestGrid />} />
               <Route path="t1" element={<TestGrid />} />
               <Route path="t2" element={<TestL />} />
-              <Route path="dashboard" element={<Dashboard/>} />
-              <Route path="customer-register" element={<CustomerRegister/>} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="customer-register" element={<CustomerRegister />} />
+              <Route path="new-item" element={<AddNewItem />} />
             </Route>
             <Route path="*" element={<p>There's nothing here: 404!</p>} />
           </Routes>
