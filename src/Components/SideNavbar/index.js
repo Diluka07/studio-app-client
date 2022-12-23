@@ -1,18 +1,21 @@
-import * as React from 'react';
-import ListSubheader from '@mui/material/ListSubheader';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Collapse from '@mui/material/Collapse';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import SendIcon from '@mui/icons-material/Send';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import StarBorder from '@mui/icons-material/StarBorder';
+import * as React from "react";
+import ListSubheader from "@mui/material/ListSubheader";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Collapse from "@mui/material/Collapse";
+import HomeIcon from "@mui/icons-material/Home";
+import WorkIcon from "@mui/icons-material/Work";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import PeopleIcon from "@mui/icons-material/People";
+import AssessmentIcon from "@mui/icons-material/Assessment";
+import GroupsIcon from "@mui/icons-material/Groups";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
 
- const SideNavbar = () => {
+const SideNavbar = () => {
   const [open, setOpen] = React.useState(true);
 
   const handleClick = () => {
@@ -21,39 +24,74 @@ import StarBorder from '@mui/icons-material/StarBorder';
 
   return (
     <List
-      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+      sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
       component="nav"
       aria-labelledby="nested-list-subheader"
       subheader={
         <ListSubheader component="div" id="nested-list-subheader">
-          Nested List Items
+          Navigation
         </ListSubheader>
       }
     >
       <ListItemButton>
         <ListItemIcon>
-          <SendIcon />
+          <HomeIcon />
         </ListItemIcon>
-        <ListItemText primary="Sent mail" />
-      </ListItemButton>
-      <ListItemButton>
-        <ListItemIcon>
-          <DraftsIcon />
-        </ListItemIcon>
-        <ListItemText primary="Drafts" />
+        <ListItemText primary="Home" />
       </ListItemButton>
       <ListItemButton onClick={handleClick}>
         <ListItemIcon>
-          <InboxIcon />
+          <WorkIcon />
         </ListItemIcon>
-        <ListItemText primary="Inbox" />
+        <ListItemText primary="Rentals" />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           <ListItemButton sx={{ pl: 4 }}>
             <ListItemIcon>
-              <StarBorder />
+              <FiberManualRecordIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="New Rental" />
+          </ListItemButton>
+          <ListItemButton sx={{ pl: 4 }}>
+            <ListItemIcon>
+              <FiberManualRecordIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Finish Rental" />
+          </ListItemButton>
+        </List>
+      </Collapse>
+      <ListItemButton>
+        <ListItemIcon>
+          <InventoryIcon />
+        </ListItemIcon>
+        <ListItemText primary="Inventory" />
+      </ListItemButton>
+      <ListItemButton>
+        <ListItemIcon>
+          <GroupsIcon />
+        </ListItemIcon>
+        <ListItemText primary="Customers" />
+      </ListItemButton>
+      <ListItemButton>
+        <ListItemIcon>
+          <PeopleIcon />
+        </ListItemIcon>
+        <ListItemText primary="Users" />
+      </ListItemButton>
+      <ListItemButton onClick={handleClick}>
+        <ListItemIcon>
+          <AssessmentIcon />
+        </ListItemIcon>
+        <ListItemText primary="Reports" />
+        {open ? <ExpandLess /> : <ExpandMore />}
+      </ListItemButton>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <ListItemButton sx={{ pl: 4 }}>
+            <ListItemIcon>
+              <FiberManualRecordIcon fontSize="small" />
             </ListItemIcon>
             <ListItemText primary="Starred" />
           </ListItemButton>
@@ -61,7 +99,6 @@ import StarBorder from '@mui/icons-material/StarBorder';
       </Collapse>
     </List>
   );
-}
-
+};
 
 export default SideNavbar;
