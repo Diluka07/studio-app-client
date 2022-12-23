@@ -5,7 +5,8 @@ import {
   addNewItem,
   getAllCategories,
   getAllMusicalItems,
-  getExistingMusicalItem
+  getExistingMusicalItem,
+  updateMusicalItem,
 } from "../../services/musicalItem";
 
 const initialState = {
@@ -25,6 +26,11 @@ const initialState = {
     error: null,
   },
   musicalItemData: {
+    loading: false,
+    data: null,
+    error: null,
+  },
+  musicalItemUpdateResponseData: {
     loading: false,
     data: null,
     error: null,
@@ -60,6 +66,13 @@ export const getExistingMusicalItemAsync = createAsyncThunk(
     return response.data.data;
   }
 );
+export const updateMusicalItemAsync = createAsyncThunk(
+  "musicalItem/updateMusicalIte",
+  async (data) => {
+    const response = await updateMusicalItem(data);
+    return response.data.data;
+  }
+);
 
 export const customerSlice = createSlice({
   name: "musicalItem",
@@ -76,6 +89,10 @@ export const customerSlice = createSlice({
     },
     getMusicalItemDataReset: (state) => {
       state.musicalItemData = initialState.musicalItemData;
+    },
+    updateMusicalItemDataReset: (state) => {
+      state.musicalItemUpdateResponseData =
+        initialState.musicalItemUpdateResponseData;
     },
   },
   extraReducers: (builder) => {
@@ -135,6 +152,20 @@ export const customerSlice = createSlice({
         state.musicalItemData.data = null;
         state.musicalItemData.error = action.error;
       });
+    builder
+      .addCase(updateMusicalItemAsync.pending, (state) => {
+        state.musicalItemUpdateResponseData.loading = true;
+      })
+      .addCase(updateMusicalItemAsync.fulfilled, (state, action) => {
+        state.musicalItemUpdateResponseData.loading = false;
+        state.musicalItemUpdateResponseData.data = action.payload;
+        state.musicalItemUpdateResponseData.error = null;
+      })
+      .addCase(updateMusicalItemAsync.rejected, (state, action) => {
+        state.musicalItemUpdateResponseData.loading = false;
+        state.musicalItemUpdateResponseData.data = null;
+        state.musicalItemUpdateResponseData.error = action.error;
+      });
   },
 });
 
@@ -144,7 +175,8 @@ export const {
   addNewItemDataReset,
   getAllCategoriesDataReset,
   getAllMusicalItemsDataReset,
-  getMusicalItemDataReset
+  getMusicalItemDataReset,
+  updateMusicalItemDataReset,
 } = actions;
 
 export default reducer;

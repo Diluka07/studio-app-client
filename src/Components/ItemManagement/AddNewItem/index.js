@@ -4,7 +4,9 @@ import {
   addNewItemAsync,
   addNewItemDataReset,
   getAllCategoriesAsync,
+  getAllCategoriesDataReset,
   getAllMusicalItemsAsync,
+  getAllMusicalItemsDataReset,
   getExistingMusicalItemAsync,
   getMusicalItemDataReset,
 } from "../../../Redux/slices/musicalItem";
@@ -51,8 +53,13 @@ const AddNewItem = () => {
 
   useEffect(() => {
     dispatch(getAllCategoriesAsync());
-    dispatch(getAllMusicalItemsAsync());
-  }, []);
+    return () => {
+      dispatch(getAllCategoriesDataReset());
+      dispatch(getAllMusicalItemsDataReset());
+      dispatch(addNewItemDataReset());
+      dispatch(getMusicalItemDataReset());
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     if (data) {
@@ -74,7 +81,7 @@ const AddNewItem = () => {
       );
       setTimeout(() => dispatch(alertDataReset()), 5000);
     }
-  }, [dispatch, error]);
+  }, [dispatch, error, musicalItemsError, musicalItemError]);
 
   const downloadQR = () => {
     saveAs(qrValue, "QR.png");
@@ -89,6 +96,7 @@ const AddNewItem = () => {
       itemId: "",
       itemName: "",
     });
+    dispatch(getAllMusicalItemsAsync());
     setDisplayCost("");
     dispatch(addNewItemDataReset());
     dispatch(getMusicalItemDataReset());
