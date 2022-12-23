@@ -12,20 +12,41 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import MenuItem from "@mui/material/MenuItem";
+import Menu from "@mui/material/Menu";
+import AccountCircle from "@mui/icons-material/AccountCircle";
 import SideNavbar from "../../SideNavbar";
 
 const drawerWidth = 240;
 
 const ProtectedLayout = (props) => {
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(loadUserAsync());
-  }, []);
-  const { loading, isAuthenticated, error } = useSelector(
-    (state) => state.authentication.authData
-  );
+  }, [dispatch]);
+
+  const {
+    loading,
+    data: user,
+    error,
+  } = useSelector((state) => state.authentication.loggedUserData);
+
+  useEffect(() => {
+    console.log(user, loading);
+  }, [user, loading]);
+
   const { window, children } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -66,9 +87,47 @@ const ProtectedLayout = (props) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Responsive drawer
+          <Typography variant="h5" noWrap component="div">
+            Elvi Rentals
           </Typography>
+          {!loading && user && (
+            <div
+              className="row"
+              style={{ marginLeft: "auto", marginRight: "0" }}
+            >
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <div style={{ fontSize: "20px", marginRight: "10px" }}>
+                  {user.name}
+                </div>
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleClose}>Log Out</MenuItem>
+              </Menu>
+            </div>
+          )}
         </Toolbar>
       </AppBar>
       <Box
