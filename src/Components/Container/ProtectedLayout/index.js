@@ -88,7 +88,7 @@ const ProtectedLayout = (props) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h5" noWrap component="div">
-            Elvi Rentals
+            <b>Elvi Rentals</b>
           </Typography>
           {!loading && user && (
             <div

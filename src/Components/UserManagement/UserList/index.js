@@ -16,7 +16,7 @@ import {
   GridToolbarDensitySelector,
 } from "@mui/x-data-grid";
 
-const ItemList = () => {
+const UserList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -58,41 +58,63 @@ const ItemList = () => {
     );
   }
 
+  const data = [
+    {
+      id: 1,
+      name: "Diluka Hewage",
+      nic: "669547912V",
+      contact: "diluka@gmail.com",
+      date: "Cashier",
+    },
+    {
+      id: 2,
+      name: "Kamal Perera",
+      nic: "985684423V",
+      contact: "kamal@gmail.com",
+      date: "Cashier",
+    },
+    {
+      id: 3,
+      name: "Nuwan Chamara",
+      nic: "669845523V",
+      contact: "nuwan@gmail.com",
+      date: "Manager",
+    },
+    {
+      id: 4,
+      name: "Sandun Fernando",
+      nic: "985684423V",
+      contact: "sandun@gmail.com",
+      date: "Manager",
+    },
+    {
+      id: 5,
+      name: "Reno Amarasekara",
+      nic: "985684423V",
+      contact: "reno@gmail.com",
+      date: "Manager",
+    },
+  ];
+
   const columns = [
     {
       field: "name",
-      headerName: "Item Name",
+      headerName: "Name",
       flex: 1,
     },
     {
-      field: "quantity",
-      headerName: "Full Quantity",
+      field: "nic",
+      headerName: "NIC",
       flex: 1,
     },
     {
-      field: "category",
-      headerName: "Category",
+      field: "contact",
+      headerName: "Username",
       flex: 1,
-      renderCell: (params) => <>{params.row.category.name}</>,
     },
     {
-      field: "cost",
-      headerName: "Cost",
-      flex: 1,
-      renderCell: (params) => (
-        <NumericFormat
-          value={params.row.cost}
-          displayType="text"
-          fixedDecimalScale={true}
-          thousandSeparator=","
-          prefix={"Rs. "}
-          decimalScale={2}
-        />
-      ),
-    },
-    {
-      field: "inStockQuantity",
-      headerName: "In Stock",
+      field: "date",
+      headerName: "User Type",
       flex: 1,
     },
     {
@@ -103,7 +125,7 @@ const ItemList = () => {
         <i
           className="bi bi-pencil-square"
           style={{ color: "green", fontSize: "18px", cursor: "pointer" }}
-          onClick={() => handleEditClick(params.id)}
+          //onClick={() => handleEditClick(params.id)}
         ></i>
       ),
     },
@@ -113,17 +135,17 @@ const ItemList = () => {
     <div className="card">
       <div className="card-body">
         <h5 className="card-title mb-4">
-          <b>Item List</b>
+          <b>User List</b>
         </h5>
         <div style={{ height: 400, width: "100%" }}>
           <DataGrid
-            rows={musicalItems}
+            rows={data}
             columns={columns}
             pageSize={pageSize}
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
             rowsPerPageOptions={[5, 10, 20]}
-            getRowId={(row) => row._id}
-            loading={loadingMusicalItems}
+            //getRowId={(row) => row._id}
+            loading={false}
             components={{ Toolbar: CustomToolbar }}
           />
         </div>
@@ -132,4 +154,4 @@ const ItemList = () => {
   );
 };
 
-export default ItemList;
+export default UserList;

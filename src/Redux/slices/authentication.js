@@ -26,7 +26,7 @@ export const loginAsync = createAsyncThunk(
     });
     if (response.status === 200) {
       localStorage.setItem("token", response.data.token);
-      data.navigate("/t1");
+      data.navigate("/dashboard");
     } else {
       localStorage.clear();
       data.navigate("/");

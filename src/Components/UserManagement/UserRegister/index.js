@@ -4,7 +4,7 @@ import { customerRegisterAsync } from "../../../Redux/slices/customer";
 import { setAlertData, alertDataReset } from "../../../Redux/slices/alert";
 import { useDispatch, useSelector } from "react-redux";
 
-const CustomerRegister = () => {
+const UseRegister = () => {
   const dispatch = useDispatch();
   const { loading, data, error } = useSelector(
     (state) => state.customer.customerRegisterData
@@ -57,7 +57,7 @@ const CustomerRegister = () => {
     <div className="card">
       <div className="card-body">
         <h5 className="card-title mb-4">
-          <b>Customer Register</b>
+          <b>User Register</b>
         </h5>
         <form onSubmit={(e) => onSubmit(e)}>
           <div className="row">
@@ -67,6 +67,19 @@ const CustomerRegister = () => {
               </label>
               <input
                 type="text"
+                className="form-control"
+                name="name"
+                value={name}
+                required
+                onChange={(e) => onChange(e)}
+              />
+            </div>
+            <div className="col-lg-4 mb-3 ">
+              <label for="name" className="form-label">
+                Username(email) <span style={{ color: "red" }}>*</span>
+              </label>
+              <input
+                type="email"
                 className="form-control"
                 name="name"
                 value={name}
@@ -89,38 +102,50 @@ const CustomerRegister = () => {
             </div>
             <div className="col-lg-4 mb-3 ">
               <label for="name" className="form-label">
-                Contact Number 1 <span style={{ color: "red" }}>*</span>
+                User Type<span style={{ color: "red" }}>*</span>
+              </label>
+              <select
+                className="form-select"
+                aria-label="Default select example"
+              >
+                <option value="">--Select--</option>
+              </select>
+            </div>
+            <div className="col-lg-4 mb-3 ">
+              <label for="name" className="form-label">
+                Password <span style={{ color: "red" }}>*</span>
               </label>
               <input
-                type="number"
+                type="password"
                 className="form-control"
-                name="contactNumber1"
-                value={contactNumber1}
+                name="name"
+                value={name}
                 required
                 onChange={(e) => onChange(e)}
               />
             </div>
             <div className="col-lg-4 mb-3 ">
               <label for="name" className="form-label">
-                Contact Number 2
+                Confirm Password <span style={{ color: "red" }}>*</span>
               </label>
               <input
-                type="number"
+                type="password"
                 className="form-control"
-                name="contactNumber2"
-                value={contactNumber2}
+                name="name"
+                value={name}
+                required
                 onChange={(e) => onChange(e)}
               />
             </div>
             <div className="col-lg-4 mb-3 ">
               <label for="name" className="form-label">
-                Address <span style={{ color: "red" }}>*</span>
+                Contact Number<span style={{ color: "red" }}>*</span>
               </label>
               <input
-                type="text"
+                type="number"
                 className="form-control"
-                name="address"
-                value={address}
+                name="contactNumber1"
+                value={contactNumber1}
                 required
                 onChange={(e) => onChange(e)}
               />
@@ -137,4 +162,4 @@ const CustomerRegister = () => {
   );
 };
 
-export default CustomerRegister;
+export default UseRegister;

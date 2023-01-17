@@ -4,7 +4,7 @@ import { customerRegisterAsync } from "../../../Redux/slices/customer";
 import { setAlertData, alertDataReset } from "../../../Redux/slices/alert";
 import { useDispatch, useSelector } from "react-redux";
 
-const CustomerRegister = () => {
+const UpdateCustomer = () => {
   const dispatch = useDispatch();
   const { loading, data, error } = useSelector(
     (state) => state.customer.customerRegisterData
@@ -57,7 +57,7 @@ const CustomerRegister = () => {
     <div className="card">
       <div className="card-body">
         <h5 className="card-title mb-4">
-          <b>Customer Register</b>
+          <b>Customer Details</b>
         </h5>
         <form onSubmit={(e) => onSubmit(e)}>
           <div className="row">
@@ -69,7 +69,7 @@ const CustomerRegister = () => {
                 type="text"
                 className="form-control"
                 name="name"
-                value={name}
+                value="K Perera"
                 required
                 onChange={(e) => onChange(e)}
               />
@@ -82,7 +82,7 @@ const CustomerRegister = () => {
                 type="text"
                 className="form-control"
                 name="nic"
-                value={nic}
+                value="982510025V"
                 required
                 onChange={(e) => onChange(e)}
               />
@@ -95,7 +95,7 @@ const CustomerRegister = () => {
                 type="number"
                 className="form-control"
                 name="contactNumber1"
-                value={contactNumber1}
+                value="0785696548"
                 required
                 onChange={(e) => onChange(e)}
               />
@@ -120,7 +120,7 @@ const CustomerRegister = () => {
                 type="text"
                 className="form-control"
                 name="address"
-                value={address}
+                value="Colombo 07"
                 required
                 onChange={(e) => onChange(e)}
               />
@@ -128,7 +128,7 @@ const CustomerRegister = () => {
           </div>
           <div className="d-grid gap-2 d-md-flex justify-content-md-end">
             <button className="btn btn-primary me-md-2" type="submit">
-              Create
+              Update
             </button>
           </div>
         </form>
@@ -137,4 +137,4 @@ const CustomerRegister = () => {
   );
 };
 
-export default CustomerRegister;
+export default UpdateCustomer;

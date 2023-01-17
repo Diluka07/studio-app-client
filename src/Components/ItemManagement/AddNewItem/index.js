@@ -15,6 +15,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { NumericFormat } from "react-number-format";
 import { useQRCode } from "react-qrcode";
 import { saveAs } from "file-saver";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 const AddNewItem = () => {
   const dispatch = useDispatch();
@@ -50,6 +56,8 @@ const AddNewItem = () => {
 
   const [newItemId, setNewItemId] = useState("");
   const qrValue = useQRCode(newItemId);
+
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     dispatch(getAllCategoriesAsync());
@@ -109,6 +117,10 @@ const AddNewItem = () => {
     });
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const onSelectExistingItem = (e) => {
     dispatch(getExistingMusicalItemAsync(e.target.value));
     setFormData({
@@ -120,13 +132,19 @@ const AddNewItem = () => {
   const onSubmit = (e) => {
     console.log(formData);
     e.preventDefault();
+    setOpen(true);
+  };
+
+  const onConfirm = () => {
     dispatch(addNewItemAsync(formData));
   };
 
   return (
     <div className="card">
       <div className="card-body">
-        <h5 className="card-title mb-4">Add New Item</h5>
+        <h5 className="card-title mb-4">
+          <b>Add New Item</b>
+        </h5>
         <form onSubmit={(e) => onSubmit(e)}>
           <div className="row">
             <div className="col-lg-4 mb-3 ">
@@ -281,6 +299,28 @@ const AddNewItem = () => {
           </>
         )}
       </div>
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Use Google's location service?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure want to add New {formData.itemName}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpen(false)}>No</Button>
+          <Button onClick={() => onConfirm()} autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

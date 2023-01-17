@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import ListSubheader from "@mui/material/ListSubheader";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -7,15 +8,19 @@ import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
 import HomeIcon from "@mui/icons-material/Home";
 import WorkIcon from "@mui/icons-material/Work";
+import BusinessIcon from "@mui/icons-material/Business";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import PeopleIcon from "@mui/icons-material/People";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import GroupsIcon from "@mui/icons-material/Groups";
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import BuildIcon from "@mui/icons-material/Build";
+import ReceiptIcon from "@mui/icons-material/Receipt";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
 const SideNavbar = () => {
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(true);
 
   const handleClick = () => {
@@ -24,39 +29,44 @@ const SideNavbar = () => {
 
   return (
     <List
-      sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+      sx={{
+        width: "100%",
+        maxWidth: 360,
+        bgcolor: "background.paper",
+        color: "#1976d2",
+      }}
       component="nav"
       aria-labelledby="nested-list-subheader"
-      subheader={
-        <ListSubheader component="div" id="nested-list-subheader">
-          Navigation
-        </ListSubheader>
-      }
+      // subheader={
+      //   <ListSubheader component="div" id="nested-list-subheader">
+      //     Navigation
+      //   </ListSubheader>
+      // }
     >
-      <ListItemButton>
+      <ListItemButton onClick={() => navigate(`/dashboard`)}>
         <ListItemIcon>
-          <HomeIcon />
+          <HomeIcon style={{ color: "#1976d2" }} />
         </ListItemIcon>
         <ListItemText primary="Home" />
       </ListItemButton>
       <ListItemButton onClick={handleClick}>
         <ListItemIcon>
-          <WorkIcon />
+          <WorkIcon style={{ color: "#1976d2" }} />
         </ListItemIcon>
-        <ListItemText primary="Rentals" />
+        <ListItemText primary="Product Rentals" />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           <ListItemButton sx={{ pl: 4 }}>
             <ListItemIcon>
-              <FiberManualRecordIcon fontSize="small" />
+              <ArrowRightIcon fontSize="large" style={{ color: "#1976d2" }} />
             </ListItemIcon>
             <ListItemText primary="New Rental" />
           </ListItemButton>
           <ListItemButton sx={{ pl: 4 }}>
             <ListItemIcon>
-              <FiberManualRecordIcon fontSize="small" />
+              <ArrowRightIcon fontSize="large" style={{ color: "#1976d2" }} />
             </ListItemIcon>
             <ListItemText primary="Finish Rental" />
           </ListItemButton>
@@ -64,25 +74,43 @@ const SideNavbar = () => {
       </Collapse>
       <ListItemButton>
         <ListItemIcon>
-          <InventoryIcon />
+          <BusinessIcon style={{ color: "#1976d2" }} />
+        </ListItemIcon>
+        <ListItemText primary="Studio Rentals" />
+      </ListItemButton>
+      <ListItemButton onClick={() => navigate(`/item-list`)}>
+        <ListItemIcon>
+          <InventoryIcon style={{ color: "#1976d2" }} />
         </ListItemIcon>
         <ListItemText primary="Inventory" />
       </ListItemButton>
-      <ListItemButton>
+      <ListItemButton onClick={() => navigate(`/customer-list`)}>
         <ListItemIcon>
-          <GroupsIcon />
+          <GroupsIcon style={{ color: "#1976d2" }} />
         </ListItemIcon>
         <ListItemText primary="Customers" />
       </ListItemButton>
-      <ListItemButton>
+      <ListItemButton onClick={() => navigate(`/user-list`)}>
         <ListItemIcon>
-          <PeopleIcon />
+          <PeopleIcon style={{ color: "#1976d2" }} />
         </ListItemIcon>
         <ListItemText primary="Users" />
       </ListItemButton>
+      <ListItemButton>
+        <ListItemIcon>
+          <ReceiptIcon style={{ color: "#1976d2" }} />
+        </ListItemIcon>
+        <ListItemText primary="Damage Charge" />
+      </ListItemButton>
+      <ListItemButton>
+        <ListItemIcon>
+          <BuildIcon style={{ color: "#1976d2" }} />
+        </ListItemIcon>
+        <ListItemText primary="Maintanence" />
+      </ListItemButton>
       <ListItemButton onClick={handleClick}>
         <ListItemIcon>
-          <AssessmentIcon />
+          <AssessmentIcon style={{ color: "#1976d2" }} />
         </ListItemIcon>
         <ListItemText primary="Reports" />
         {open ? <ExpandLess /> : <ExpandMore />}
@@ -91,7 +119,7 @@ const SideNavbar = () => {
         <List component="div" disablePadding>
           <ListItemButton sx={{ pl: 4 }}>
             <ListItemIcon>
-              <FiberManualRecordIcon fontSize="small" />
+              <ArrowRightIcon fontSize="large" style={{ color: "#1976d2" }} />
             </ListItemIcon>
             <ListItemText primary="Starred" />
           </ListItemButton>

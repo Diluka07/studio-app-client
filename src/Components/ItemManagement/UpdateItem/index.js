@@ -12,8 +12,6 @@ import { setAlertData, alertDataReset } from "../../../Redux/slices/alert";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { NumericFormat } from "react-number-format";
-import { useQRCode } from "react-qrcode";
-import { saveAs } from "file-saver";
 
 const UpdateItem = () => {
   const params = useParams();
@@ -106,7 +104,9 @@ const UpdateItem = () => {
   return (
     <div className="card">
       <div className="card-body">
-        <h5 className="card-title mb-4">Update Item</h5>
+        <h5 className="card-title mb-4">
+          <b>Update Item</b>
+        </h5>
         <form onSubmit={(e) => onSubmit(e)}>
           <div className="row">
             <div className="col-lg-4 mb-3 ">
