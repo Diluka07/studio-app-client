@@ -8,12 +8,17 @@ const config = {
 };
 
 export const customerRegister = async (data) => {
-
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
-  const res = await axios.post("/api/customers",data, config);
-  console.log(res);
+  const res = await axios.post("/api/customers", data, config);
   return res;
 };
 
+export const getAllCustomers = async () => {
+  if (localStorage.token) {
+    setAuthToken(localStorage.token);
+  }
+  const res = await axios.get("/api/customers", config);
+  return res;
+};

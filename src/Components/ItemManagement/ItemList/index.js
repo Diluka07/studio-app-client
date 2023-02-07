@@ -112,9 +112,24 @@ const ItemList = () => {
   return (
     <div className="card">
       <div className="card-body">
-        <h5 className="card-title mb-4">
-          <b>Item List</b>
-        </h5>
+        <div className="row">
+          <div class="col-lg-4">
+            <h5 className="card-title mb-4">
+              <b>Item List</b>
+            </h5>
+          </div>
+          <div class="col">
+            <div className="d-grid gap-2 d-md-flex justify-content-md-end mb-4">
+              <button
+                className="btn btn-primary me-md-2"
+                type="button"
+                onClick={() => navigate("/new-item")}
+              >
+                Add New Item
+              </button>
+            </div>
+          </div>
+        </div>
         <div style={{ height: 400, width: "100%" }}>
           <DataGrid
             rows={musicalItems}

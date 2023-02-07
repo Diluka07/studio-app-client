@@ -5,7 +5,6 @@ import {
 } from "../../../Redux/slices/product";
 import { setAlertData, alertDataReset } from "../../../Redux/slices/alert";
 import { useDispatch, useSelector } from "react-redux";
-import { QrReader } from "react-qr-reader";
 import {
   DataGrid,
   GridToolbarContainer,
@@ -17,15 +16,6 @@ import { NumericFormat } from "react-number-format";
 
 const NewItemRental = () => {
   const dispatch = useDispatch();
-  const [productId, setProductId] = useState("No result");
-
-  useEffect(() => {
-    if (productId) {
-      dispatch(getProductAsync(productId));
-    }
-  }, [dispatch, productId]);
-  const [productsToRent, setProductsToRent] = useState([]);
-
   const [pageSize, setPageSize] = useState(5);
   function CustomToolbar() {
     return (
@@ -92,22 +82,27 @@ const NewItemRental = () => {
             Select Customer <span style={{ color: "red" }}>*</span>
           </label>
 
-          <select
-            className="form-select"
-            aria-label="Default select example"
+          <input
+            type="text"
+            className="form-control"
+            name="itemName"
+            //value={itemName}
+            required
             //onChange={(e) => onChange(e)}
-            //value={category}
-            name="category"
-          >
-            <option value="">--Select--</option>
-            {/* {!loadingCategories &&
-                    categoryError === null &&
-                    categories.length > 0
-                      ? categories.map((c) => (
-                          <option value={c.id}>{c.name} </option>
-                        ))
-                      : []} */}
-          </select>
+          />
+        </div>
+        <div className="col-lg-4 mb-3 ">
+          <label for="name" className="form-label">
+            Rented Date <span style={{ color: "red" }}>*</span>
+          </label>
+          <input
+            type="date"
+            className="form-control"
+            name="itemName"
+            //value={itemName}
+            required
+            //onChange={(e) => onChange(e)}
+          />
         </div>
         <div className="col-lg-4 mb-3 ">
           <label for="name" className="form-label">
@@ -137,55 +132,6 @@ const NewItemRental = () => {
           />
         </div>
       </div>
-      <div className="row">
-            <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-              <button className="btn btn-primary me-md-2" type="submit">
-                Generate Invoice
-              </button>
-            </div>
-          </div>
-      <div className="row">
-        <div
-          className="col-lg-3"
-          style={{ width: "200px", height: "200px", border: "solid black" }}
-        >
-          <QrReader
-            onResult={(result, error) => {
-              if (!!result) {
-                console.log(result);
-                setProductId(result?.text);
-              }
-              if (!!error) {
-                console.info(error);
-              }
-            }}
-          />
-        </div>
-        {/* <div className="col-lg-4 mb-3 ">
-          <label for="name" className="form-label">
-            <b>Total Amount:</b>
-          </label>
-          <NumericFormat
-            value={120000}
-            className="form-control"
-            thousandSeparator=","
-            prefix=" Rs. "
-            displayType="text"
-            // onValueChange={(values, sourceInfo) => {
-            //   setFormData({
-            //     ...formData,
-            //     cost: values.value,
-            //   });
-            //   setDisplayCost(values.formattedValue);
-            // }}
-            fixedDecimalScale={true}
-            decimalScale={2}
-            renderText={(value) => <>{value}</>}
-            required
-            disabled
-          />
-        </div> */}
-      </div>
 
       <div className="mt-3" style={{ height: 400, width: "100%" }}>
         <DataGrid
@@ -197,6 +143,13 @@ const NewItemRental = () => {
           loading={false}
           components={{ Toolbar: CustomToolbar }}
         />
+      </div>
+      <div className="row">
+        <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button className="btn btn-primary me-md-2" type="submit">
+            Finish Rental
+          </button>
+        </div>
       </div>
     </div>
   );

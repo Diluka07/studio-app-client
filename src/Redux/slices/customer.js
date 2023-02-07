@@ -1,12 +1,22 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // services
-import { customerRegister } from "../../services/customer";
+import { customerRegister, getAllCustomers } from "../../services/customer";
 
 const initialState = {
   customerRegisterData: {
     loading: false,
-    data: false,
+    data: null,
+    error: null,
+  },
+  customersData: {
+    loading: false,
+    data: [],
+    error: null,
+  },
+  customerUpdateResponseData: {
+    loading: false,
+    data: null,
     error: null,
   },
 };
@@ -20,12 +30,36 @@ export const customerRegisterAsync = createAsyncThunk(
   }
 );
 
+export const getAllCustomersAsync = createAsyncThunk(
+  "customer/getAllCustomers",
+  async () => {
+    const response = await getAllCustomers();
+    console.log(response.data.data);
+    return response.data.data;
+  }
+);
+
+export const updateCustomerAsync = createAsyncThunk(
+  "customer/updateCustomer",
+  async () => {
+    const response = await getAllCustomers();
+    return response.data.data;
+  }
+);
+
 export const customerSlice = createSlice({
   name: "customer",
   initialState,
   reducers: {
     customerRegisterDataReset: (state) => {
       state.customerRegisterData = initialState.customerRegisterData;
+    },
+    customersDataReset: (state) => {
+      state.customersData = initialState.customersData;
+    },
+    customerUpdateResponseDataReset: (state) => {
+      state.customerUpdateResponseData =
+        initialState.customerUpdateResponseData;
     },
   },
   extraReducers: (builder) => {
@@ -43,11 +77,43 @@ export const customerSlice = createSlice({
         state.customerRegisterData.data = false;
         state.customerRegisterData.error = action.error;
       });
+    builder
+      .addCase(getAllCustomersAsync.pending, (state) => {
+        state.customersData.loading = true;
+      })
+      .addCase(getAllCustomersAsync.fulfilled, (state, action) => {
+        state.customersData.loading = false;
+        state.customersData.data = action.payload;
+        state.customersData.error = null;
+      })
+      .addCase(getAllCustomersAsync.rejected, (state, action) => {
+        state.customersData.loading = false;
+        state.customersData.data = [];
+        state.customersData.error = action.error;
+      });
+    builder
+      .addCase(updateCustomerAsync.pending, (state) => {
+        state.customerUpdateResponseData.loading = true;
+      })
+      .addCase(updateCustomerAsync.fulfilled, (state, action) => {
+        state.customerUpdateResponseData.loading = false;
+        state.customerUpdateResponseData.data = action.payload;
+        state.customerUpdateResponseData.error = null;
+      })
+      .addCase(updateCustomerAsync.rejected, (state, action) => {
+        state.customerUpdateResponseData.loading = false;
+        state.customerUpdateResponseData.data = false;
+        state.customerUpdateResponseData.error = action.error;
+      });
   },
 });
 
 const { actions, reducer } = customerSlice;
 
-export const { customerRegisterDataReset } = actions;
+export const {
+  customerRegisterDataReset,
+  customersDataReset,
+  customerUpdateResponseDataReset,
+} = actions;
 
 export default reducer;

@@ -35,6 +35,11 @@ const initialState = {
     data: null,
     error: null,
   },
+  productData: {
+    loading: false,
+    data: null,
+    error: null,
+  },
 };
 
 // thunk actions

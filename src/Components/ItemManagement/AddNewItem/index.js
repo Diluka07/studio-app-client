@@ -50,11 +50,12 @@ const AddNewItem = () => {
     itemId: "",
     cost: "",
   });
-  const { existingItem, category, itemName, cost } = formData;
+  const { existingItem, category, itemName } = formData;
 
   const [displayCost, setDisplayCost] = useState("");
 
   const [newItemId, setNewItemId] = useState("");
+
   const qrValue = useQRCode(newItemId);
 
   const [open, setOpen] = useState(false);
@@ -81,6 +82,12 @@ const AddNewItem = () => {
       setNewItemId(data.musicalItem._id);
     }
   }, [dispatch, data]);
+
+  useEffect(() => {
+    if (qrValue) {
+      saveAs(qrValue, `${newItemId}.png`);
+    }
+  }, [qrValue]);
 
   useEffect(() => {
     if (error || musicalItemsError || musicalItemError) {
@@ -130,13 +137,13 @@ const AddNewItem = () => {
   };
 
   const onSubmit = (e) => {
-    console.log(formData);
     e.preventDefault();
     setOpen(true);
   };
 
   const onConfirm = () => {
     dispatch(addNewItemAsync(formData));
+    setOpen(false);
   };
 
   return (
@@ -306,12 +313,11 @@ const AddNewItem = () => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {"Use Google's location service?"}
-        </DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Please Confirm"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure want to add New {formData.itemName}
+            Are you sure want to add New <b>{formData.itemName}</b> item to the
+            stock?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
