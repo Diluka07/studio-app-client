@@ -21,6 +21,7 @@ import UserList from "./Components/UserManagement/UserList";
 
 //Item Rental
 import NewItemRental from "./Components/MusicalItemRental/NewItemRental";
+import FinishRental from "./Components/MusicalItemRental/FinishRental";
 
 //Studio ental
 import NewStudioRental from "./Components/StudioRental/NewStudioRental";
@@ -28,6 +29,9 @@ import NewStudioRental from "./Components/StudioRental/NewStudioRental";
 //Studio ental
 import MaintananceList from "./Components/Maintanance/MaintenanceList";
 import NewMaintanance from "./Components/Maintanance/NewMaintanance";
+
+//Reports
+import StockReport from "./Components/Reports/StockReport";
 
 
 
@@ -64,6 +68,7 @@ function App() {
 
               {/* Item Rental */}
               <Route path="new-item-rental" element={<NewItemRental />} />
+              <Route path="item-rental/:id" element={<FinishRental />} />
 
               {/* Studio Rental */}
               <Route path="new-studio-rental" element={<NewStudioRental />} />
@@ -71,6 +76,9 @@ function App() {
                {/* Maintanance */}
                <Route path="maintanance-list" element={<MaintananceList />} />
                <Route path="new-maintanance" element={<NewMaintanance />} />
+
+               {/* Reports */}
+               <Route path="stock-report" element={<StockReport />} />
 
 
               <Route path="qr" element={<Qr />} />

@@ -1,5 +1,11 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import {
+  getAllProductinvoicesAsync,
+  productInvoicesDataReset,
+} from "../../Redux/slices/invoice";
 import {
   DataGrid,
   GridToolbarContainer,
@@ -7,21 +13,39 @@ import {
   GridToolbarFilterButton,
   GridToolbarDensitySelector,
 } from "@mui/x-data-grid";
-import { Typography } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import GroupsIcon from "@mui/icons-material/Groups";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import Chip from "@mui/material/Chip";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import { NumericFormat } from "react-number-format";
+import moment from "moment";
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [age, setAge] = React.useState("10");
 
   const handleChange = (event) => {
     setAge(event.target.value);
   };
   const [pageSize, setPageSize] = useState(5);
+
+  const {
+    loading: productInvoicesLoading,
+    data: productInvoicesData,
+    error: productInvoicesError,
+  } = useSelector((state) => state.invoice.productInvoices);
+
+  useEffect(() => {
+    dispatch(getAllProductinvoicesAsync());
+    return () => {
+      dispatch(productInvoicesDataReset());
+    };
+  }, [dispatch]);
+
   function CustomToolbar() {
     return (
       <GridToolbarContainer>
@@ -32,64 +56,72 @@ const Dashboard = () => {
     );
   }
 
-  const data = [
-    {
-      id: 1,
-      invoiceNumber: "I564",
-      customer: "Diluka Hewage",
-      date: "2022-10-09",
-      amount: 47890.0,
-    },
-    {
-      id: 2,
-      invoiceNumber: "I234",
-      customer: "Diluka Hewage",
-      date: "2022-10-09",
-      amount: 47890.0,
-    },
-    {
-      id: 3,
-      invoiceNumber: "I786",
-      customer: "Diluka Hewage",
-      date: "2022-10-09",
-      amount: 47890.0,
-    },
-    {
-      id: 4,
-      invoiceNumber: "I146",
-      customer: "Diluka Hewage",
-      date: "2022-10-09",
-      amount: 47890.0,
-    },
-    {
-      id: 5,
-      invoiceNumber: "I097",
-      customer: "Diluka Hewage",
-      date: "2022-10-09",
-      amount: 47890.0,
-    },
-  ];
-
   const columns = [
     {
-      field: "invoiceNumber",
-      headerName: "Invoice Number",
+      field: "name",
+      headerName: "Customer",
       flex: 1,
+      renderCell: (params) => <div>{params.row.customer.name}</div>,
     },
     {
       field: "customer",
-      headerName: "Customer Name",
+      headerName: "Rental Date",
       flex: 1,
+      renderCell: (params) => (
+        <div>
+          {moment(new Date(params.row.rentalDate)).format("YYYY-MM-DD")}
+        </div>
+      ),
     },
     {
       field: "date",
-      headerName: "Rented Date",
+      headerName: "Return Date",
       flex: 1,
+      renderCell: (params) => (
+        <div>
+          {moment(new Date(params.row.expectedReturnDate)).format("YYYY-MM-DD")}
+        </div>
+      ),
     },
     {
       field: "amount",
       headerName: "Amount (LKR)",
       flex: 1,
+      renderCell: (params) => (
+        <NumericFormat
+          value={params.row.rentalCost}
+          displayType="text"
+          fixedDecimalScale={true}
+          thousandSeparator=","
+          prefix={"Rs. "}
+          decimalScale={2}
+        />
+      ),
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      flex: 1,
+      renderCell: (params) => (
+        <div>
+          <Chip
+            label={params.row.isFinished ? "Finished" : "Ongoing"}
+            color={params.row.isFinished ? "success" : "primary"}
+          />
+        </div>
+      ),
+    },
+    {
+      field: "view",
+      headerName: "View",
+      flex: 1,
+      renderCell: (params) => (
+        <i
+          className="bi bi-eye-fill"
+          style={{ color: "green", fontSize: "25px", cursor: "pointer" }}
+          onClick={() => navigate(`/item-rental/${params.row._id}`)}
+        ></i>
+      ),
     },
   ];
 
@@ -166,12 +198,13 @@ const Dashboard = () => {
       </div>
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid
-          rows={data}
+          rows={productInvoicesData}
           columns={columns}
           pageSize={pageSize}
           onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
           rowsPerPageOptions={[5, 10, 20]}
-          loading={false}
+          loading={productInvoicesLoading}
+          getRowId={(row) => row._id}
           components={{ Toolbar: CustomToolbar }}
         />
       </div>

@@ -117,11 +117,11 @@ const SideNavbar = () => {
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
+          <ListItemButton sx={{ pl: 4 }} onClick={() => navigate(`/stock-report`)} >
             <ListItemIcon>
               <ArrowRightIcon fontSize="large" style={{ color: "#1976d2" }} />
             </ListItemIcon>
-            <ListItemText primary="Starred" />
+            <ListItemText primary="Stock Report" />
           </ListItemButton>
         </List>
       </Collapse>
