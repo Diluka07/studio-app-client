@@ -1,45 +1,85 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { customerRegisterAsync } from "../../../Redux/slices/customer";
+import {
+  getSingleCustomerAsync,
+  customerDataReset,
+  updateCustomerAsync,
+  customerUpdateResponseDataReset,
+} from "../../../Redux/slices/customer";
 import { setAlertData, alertDataReset } from "../../../Redux/slices/alert";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 const UpdateCustomer = () => {
+  const params = useParams();
   const dispatch = useDispatch();
-  const { loading, data, error } = useSelector(
-    (state) => state.customer.customerRegisterData
-  );
+
+  const [formData, setFormData] = useState({
+    name: "",
+    nic: "",
+    contactNumber1: null,
+    contactNumber2: null,
+    address: "",
+    id: "",
+  });
+
+  const { name, nic, contactNumber1, contactNumber2, address } = formData;
+
+  const {
+    loading: customerLoading,
+    data: customerData,
+    error: customerError,
+  } = useSelector((state) => state.customer.customerData);
+  const {
+    loading: customerUpdateResponseDataLoading,
+    data: customerUpdateResponseData,
+    error: customerUpdateResponseDataError,
+  } = useSelector((state) => state.customer.customerUpdateResponseData);
 
   useEffect(() => {
-    if (data.success) {
+    if (params.id) {
+      dispatch(getSingleCustomerAsync(params.id));
+    }
+    return () => {
+      dispatch(customerUpdateResponseDataReset());
+      dispatch(customerDataReset());
+    };
+  }, [dispatch, params]);
+
+  useEffect(() => {
+    if (!customerLoading && customerData) {
+      setFormData({
+        ...formData,
+        address: customerData.address,
+        contactNumber1: customerData.contactNumber1,
+        contactNumber2: customerData.contactNumber2,
+        name: customerData.name,
+        nic: customerData.nic,
+        id: customerData._id,
+      });
+    }
+  }, [customerLoading, customerData]);
+
+  useEffect(() => {
+    if (customerUpdateResponseData) {
       dispatch(
         setAlertData({
-          msg: "Registration Successfull",
+          msg: "Successfully Updated",
           alertType: "success",
         })
       );
       setTimeout(() => dispatch(alertDataReset()), 5000);
     }
-  }, [dispatch, data]);
+  }, [dispatch, customerUpdateResponseData]);
 
   useEffect(() => {
-    if (error) {
+    if (customerError) {
       dispatch(
         setAlertData({ msg: "Something went wrong", alertType: "error" })
       );
       setTimeout(() => dispatch(alertDataReset()), 5000);
     }
-  }, [dispatch, error]);
-
-  const [formData, setFormData] = useState({
-    name: "",
-    nic: "",
-    contactNumber1: "",
-    contactNumber2: "",
-    address: "",
-  });
-
-  const { name, nic, contactNumber1, contactNumber2, address } = formData;
+  }, [dispatch, customerError]);
 
   const onChange = (e) => {
     setFormData({
@@ -50,7 +90,8 @@ const UpdateCustomer = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(customerRegisterAsync(formData));
+    dispatch(updateCustomerAsync(formData));
+    console.log(formData);
   };
 
   return (
@@ -69,7 +110,7 @@ const UpdateCustomer = () => {
                 type="text"
                 className="form-control"
                 name="name"
-                value="K Perera"
+                value={name}
                 required
                 onChange={(e) => onChange(e)}
               />
@@ -82,7 +123,7 @@ const UpdateCustomer = () => {
                 type="text"
                 className="form-control"
                 name="nic"
-                value="982510025V"
+                value={nic}
                 required
                 onChange={(e) => onChange(e)}
               />
@@ -95,7 +136,7 @@ const UpdateCustomer = () => {
                 type="number"
                 className="form-control"
                 name="contactNumber1"
-                value="0785696548"
+                value={contactNumber1}
                 required
                 onChange={(e) => onChange(e)}
               />
@@ -120,7 +161,7 @@ const UpdateCustomer = () => {
                 type="text"
                 className="form-control"
                 name="address"
-                value="Colombo 07"
+                value={address}
                 required
                 onChange={(e) => onChange(e)}
               />

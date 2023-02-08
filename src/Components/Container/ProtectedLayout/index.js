@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { loadUserAsync } from "../../../Redux/slices/authentication";
@@ -20,6 +21,7 @@ import SideNavbar from "../../SideNavbar";
 const drawerWidth = 240;
 
 const ProtectedLayout = (props) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -46,6 +48,8 @@ const ProtectedLayout = (props) => {
 
   const handleClose = () => {
     setAnchorEl(null);
+    localStorage.clear();
+    navigate("/");
   };
 
   const handleDrawerToggle = () => {

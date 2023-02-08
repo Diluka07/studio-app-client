@@ -1,17 +1,22 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { customerRegisterAsync } from "../../../Redux/slices/customer";
+import { useNavigate } from "react-router-dom";
+import {
+  customerRegisterAsync,
+  customerRegisterDataReset,
+} from "../../../Redux/slices/customer";
 import { setAlertData, alertDataReset } from "../../../Redux/slices/alert";
 import { useDispatch, useSelector } from "react-redux";
 
 const CustomerRegister = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading, data, error } = useSelector(
     (state) => state.customer.customerRegisterData
   );
 
   useEffect(() => {
-    if (data.success) {
+    if (data) {
       dispatch(
         setAlertData({
           msg: "Registration Successfull",
@@ -19,7 +24,12 @@ const CustomerRegister = () => {
         })
       );
       setTimeout(() => dispatch(alertDataReset()), 5000);
+      navigate("/customer-list");
     }
+
+    return () => {
+      dispatch(customerRegisterDataReset());
+    };
   }, [dispatch, data]);
 
   useEffect(() => {

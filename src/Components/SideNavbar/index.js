@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import ListSubheader from "@mui/material/ListSubheader";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -27,6 +28,12 @@ const SideNavbar = () => {
     setOpen(!open);
   };
 
+  const {
+    loading: userLoading,
+    data: user,
+    error: userError,
+  } = useSelector((state) => state.authentication.loggedUserData);
+
   return (
     <List
       sx={{
@@ -49,29 +56,13 @@ const SideNavbar = () => {
         </ListItemIcon>
         <ListItemText primary="Home" />
       </ListItemButton>
-      <ListItemButton onClick={handleClick}>
+      <ListItemButton onClick={() => navigate(`/new-item-rental`)}>
         <ListItemIcon>
           <WorkIcon style={{ color: "#1976d2" }} />
         </ListItemIcon>
         <ListItemText primary="Product Rentals" />
-        {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }} onClick={() => navigate(`/new-item-rental`)}>
-            <ListItemIcon>
-              <ArrowRightIcon fontSize="large" style={{ color: "#1976d2" }} />
-            </ListItemIcon>
-            <ListItemText primary="New Rental" />
-          </ListItemButton>
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemIcon>
-              <ArrowRightIcon fontSize="large" style={{ color: "#1976d2" }} />
-            </ListItemIcon>
-            <ListItemText primary="Finish Rental" />
-          </ListItemButton>
-        </List>
-      </Collapse>
+
       <ListItemButton>
         <ListItemIcon>
           <BusinessIcon style={{ color: "#1976d2" }} />
@@ -90,41 +81,67 @@ const SideNavbar = () => {
         </ListItemIcon>
         <ListItemText primary="Customers" />
       </ListItemButton>
-      <ListItemButton onClick={() => navigate(`/user-list`)}>
-        <ListItemIcon>
-          <PeopleIcon style={{ color: "#1976d2" }} />
-        </ListItemIcon>
-        <ListItemText primary="Users" />
-      </ListItemButton>
+      {user && user.role == "manager" && (
+        <ListItemButton onClick={() => navigate(`/user-list`)}>
+          <ListItemIcon>
+            <PeopleIcon style={{ color: "#1976d2" }} />
+          </ListItemIcon>
+          <ListItemText primary="Users" />
+        </ListItemButton>
+      )}
       <ListItemButton>
         <ListItemIcon>
           <ReceiptIcon style={{ color: "#1976d2" }} />
         </ListItemIcon>
         <ListItemText primary="Damage Charge" />
       </ListItemButton>
-      <ListItemButton>
-        <ListItemIcon>
-          <BuildIcon style={{ color: "#1976d2" }} />
-        </ListItemIcon>
-        <ListItemText primary="Maintanence" />
-      </ListItemButton>
-      <ListItemButton onClick={handleClick}>
-        <ListItemIcon>
-          <AssessmentIcon style={{ color: "#1976d2" }} />
-        </ListItemIcon>
-        <ListItemText primary="Reports" />
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }} onClick={() => navigate(`/stock-report`)} >
+      {user && user.role == "manager" && (
+        <ListItemButton>
+          <ListItemIcon>
+            <BuildIcon style={{ color: "#1976d2" }} />
+          </ListItemIcon>
+          <ListItemText primary="Maintanence" />
+        </ListItemButton>
+      )}
+      {user && user.role == "manager" && (
+        <>
+          <ListItemButton onClick={handleClick}>
             <ListItemIcon>
-              <ArrowRightIcon fontSize="large" style={{ color: "#1976d2" }} />
+              <AssessmentIcon style={{ color: "#1976d2" }} />
             </ListItemIcon>
-            <ListItemText primary="Stock Report" />
+            <ListItemText primary="Reports" />
+            {open ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
-        </List>
-      </Collapse>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                onClick={() => navigate(`/stock-report`)}
+              >
+                <ListItemIcon>
+                  <ArrowRightIcon
+                    fontSize="large"
+                    style={{ color: "#1976d2" }}
+                  />
+                </ListItemIcon>
+                <ListItemText primary="Stock Report" />
+              </ListItemButton>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                onClick={() => navigate(`/rental-report`)}
+              >
+                <ListItemIcon>
+                  <ArrowRightIcon
+                    fontSize="large"
+                    style={{ color: "#1976d2" }}
+                  />
+                </ListItemIcon>
+                <ListItemText primary="Rental Report" />
+              </ListItemButton>
+            </List>
+          </Collapse>
+        </>
+      )}
     </List>
   );
 };

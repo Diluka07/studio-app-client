@@ -26,6 +26,12 @@ const ItemList = () => {
     error: error,
   } = useSelector((state) => state.musicalItem.musicalItemsData);
 
+  const {
+    loading: userLoading,
+    data: user,
+    error: userError,
+  } = useSelector((state) => state.authentication.loggedUserData);
+
   useEffect(() => {
     dispatch(getAllMusicalItemsAsync());
     return () => {
@@ -100,11 +106,15 @@ const ItemList = () => {
       headerName: "Edit",
       flex: 1,
       renderCell: (params) => (
-        <i
-          className="bi bi-pencil-square"
-          style={{ color: "green", fontSize: "18px", cursor: "pointer" }}
-          onClick={() => handleEditClick(params.id)}
-        ></i>
+        <>
+          {user && user.role == "manager" && (
+            <i
+              className="bi bi-pencil-square"
+              style={{ color: "green", fontSize: "18px", cursor: "pointer" }}
+              onClick={() => handleEditClick(params.id)}
+            ></i>
+          )}
+        </>
       ),
     },
   ];

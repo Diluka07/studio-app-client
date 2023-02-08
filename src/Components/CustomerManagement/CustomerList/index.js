@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { NumericFormat } from "react-number-format";
 import {
-  getAllMusicalItemsAsync,
-  getAllMusicalItemsDataReset,
-} from "../../../Redux/slices/musicalItem";
+  getAllCustomersAsync,
+  customersDataReset,
+} from "../../../Redux/slices/customer";
 import { setAlertData, alertDataReset } from "../../../Redux/slices/alert";
 import {
   DataGrid,
@@ -21,15 +21,21 @@ const CustomerList = () => {
   const navigate = useNavigate();
 
   const {
-    loading: loadingMusicalItems,
-    data: musicalItems,
+    loading: loadingcustomersData,
+    data: customersData,
     error: error,
-  } = useSelector((state) => state.musicalItem.musicalItemsData);
+  } = useSelector((state) => state.customer.customersData);
+
+  const {
+    loading: userLoading,
+    data: user,
+    error: userError,
+  } = useSelector((state) => state.authentication.loggedUserData);
 
   useEffect(() => {
-    dispatch(getAllMusicalItemsAsync());
+    dispatch(getAllCustomersAsync());
     return () => {
-      dispatch(getAllMusicalItemsDataReset());
+      dispatch(customersDataReset());
     };
   }, [dispatch]);
 
@@ -43,7 +49,7 @@ const CustomerList = () => {
   }, [dispatch, error]);
 
   const handleEditClick = (id) => {
-    navigate(`/update-item/${id}`);
+    navigate(`/update-customer/${id}`);
   };
 
   const [pageSize, setPageSize] = useState(5);
@@ -58,44 +64,6 @@ const CustomerList = () => {
     );
   }
 
-  const data = [
-    {
-      id: 1,
-      name: "Diluka Hewage",
-      nic: "669547912V",
-      contact: "0762569874",
-      date: "2021-03-06",
-    },
-    {
-      id: 2,
-      name: "Kamal Perera",
-      nic: "985684423V",
-      contact: "0762569874",
-      date: "2021-03-06",
-    },
-    {
-      id: 3,
-      name: "Nuwan Chamara",
-      nic: "669845523V",
-      contact: "0762569874",
-      date: "2021-03-06",
-    },
-    {
-      id: 4,
-      name: "Sandun Fernando",
-      nic: "985684423V",
-      contact: "0762569874",
-      date: "2021-03-06",
-    },
-    {
-      id: 5,
-      name: "Reno Amarasekara",
-      nic: "985684423V",
-      contact: "0762569874",
-      date: "2021-03-06",
-    },
-  ];
-
   const columns = [
     {
       field: "name",
@@ -108,13 +76,13 @@ const CustomerList = () => {
       flex: 1,
     },
     {
-      field: "contact",
+      field: "contactNumber1",
       headerName: "Contact Number",
       flex: 1,
     },
     {
-      field: "date",
-      headerName: "Registered On",
+      field: "address",
+      headerName: "Address",
       flex: 1,
     },
     {
@@ -122,11 +90,15 @@ const CustomerList = () => {
       headerName: "Edit",
       flex: 1,
       renderCell: (params) => (
-        <i
-          className="bi bi-pencil-square"
-          style={{ color: "green", fontSize: "18px", cursor: "pointer" }}
-          //onClick={() => handleEditClick(params.id)}
-        ></i>
+        <>
+          {user && user.role == "manager" && (
+            <i
+              className="bi bi-pencil-square"
+              style={{ color: "green", fontSize: "18px", cursor: "pointer" }}
+              onClick={() => handleEditClick(params.id)}
+            ></i>
+          )}
+        </>
       ),
     },
   ];
@@ -134,18 +106,36 @@ const CustomerList = () => {
   return (
     <div className="card">
       <div className="card-body">
-        <h5 className="card-title mb-4">
-          <b>Customer List</b>
-        </h5>
+        <div className="row">
+          <div className="col-lg-4">
+            <h5 className="card-title mb-4">
+              <b>Customer List</b>
+            </h5>
+          </div>
+          <div className="col">
+            {" "}
+            <div class="col">
+              <div className="d-grid gap-2 d-md-flex justify-content-md-end mb-4">
+                <button
+                  className="btn btn-primary me-md-2"
+                  type="button"
+                  onClick={() => navigate("/customer-register")}
+                >
+                  Add New Customer
+                </button>
+              </div>
+            </div>{" "}
+          </div>
+        </div>
         <div style={{ height: 400, width: "100%" }}>
           <DataGrid
-            rows={data}
+            rows={customersData}
             columns={columns}
             pageSize={pageSize}
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
             rowsPerPageOptions={[5, 10, 20]}
-            //getRowId={(row) => row._id}
-            loading={false}
+            getRowId={(row) => row._id}
+            loading={loadingcustomersData}
             components={{ Toolbar: CustomToolbar }}
           />
         </div>

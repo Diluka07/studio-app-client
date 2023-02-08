@@ -32,6 +32,7 @@ import NewMaintanance from "./Components/Maintanance/NewMaintanance";
 
 //Reports
 import StockReport from "./Components/Reports/StockReport";
+import RentalReport from "./Components/Reports/RentalReport";
 
 
 
@@ -54,7 +55,7 @@ function App() {
               <Route path="dashboard" element={<Dashboard />} />
               {/* Customer */}
               <Route path="customer-register" element={<CustomerRegister />} />
-              <Route path="customer-details" element={<UpdateCustomer />} />
+              <Route path="update-customer/:id" element={<UpdateCustomer />} />
               <Route path="customer-list" element={<CustomerList />} />
 
               {/* Items */}
@@ -79,6 +80,7 @@ function App() {
 
                {/* Reports */}
                <Route path="stock-report" element={<StockReport />} />
+               <Route path="rental-report" element={<RentalReport />} />
 
 
               <Route path="qr" element={<Qr />} />

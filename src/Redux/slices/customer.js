@@ -1,7 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // services
-import { customerRegister, getAllCustomers } from "../../services/customer";
+import {
+  customerRegister,
+  getAllCustomers,
+  getSingleCustomer,
+  updateCustomer,
+} from "../../services/customer";
 
 const initialState = {
   customerRegisterData: {
@@ -12,6 +17,11 @@ const initialState = {
   customersData: {
     loading: false,
     data: [],
+    error: null,
+  },
+  customerData: {
+    loading: false,
+    data: null,
     error: null,
   },
   customerUpdateResponseData: {
@@ -39,10 +49,18 @@ export const getAllCustomersAsync = createAsyncThunk(
   }
 );
 
+export const getSingleCustomerAsync = createAsyncThunk(
+  "customer/getSingleCustomer",
+  async (id) => {
+    const response = await getSingleCustomer(id);
+    return response.data.data;
+  }
+);
+
 export const updateCustomerAsync = createAsyncThunk(
   "customer/updateCustomer",
-  async () => {
-    const response = await getAllCustomers();
+  async (data) => {
+    const response = await updateCustomer(data);
     return response.data.data;
   }
 );
@@ -56,6 +74,9 @@ export const customerSlice = createSlice({
     },
     customersDataReset: (state) => {
       state.customersData = initialState.customersData;
+    },
+    customerDataReset: (state) => {
+      state.customerData = initialState.customerData;
     },
     customerUpdateResponseDataReset: (state) => {
       state.customerUpdateResponseData =
@@ -92,6 +113,20 @@ export const customerSlice = createSlice({
         state.customersData.error = action.error;
       });
     builder
+      .addCase(getSingleCustomerAsync.pending, (state) => {
+        state.customerData.loading = true;
+      })
+      .addCase(getSingleCustomerAsync.fulfilled, (state, action) => {
+        state.customerData.loading = false;
+        state.customerData.data = action.payload;
+        state.customerData.error = null;
+      })
+      .addCase(getSingleCustomerAsync.rejected, (state, action) => {
+        state.customerData.loading = false;
+        state.customerData.data = null;
+        state.customerData.error = action.error;
+      });
+    builder
       .addCase(updateCustomerAsync.pending, (state) => {
         state.customerUpdateResponseData.loading = true;
       })
@@ -113,6 +148,7 @@ const { actions, reducer } = customerSlice;
 export const {
   customerRegisterDataReset,
   customersDataReset,
+  customerDataReset,
   customerUpdateResponseDataReset,
 } = actions;
 
